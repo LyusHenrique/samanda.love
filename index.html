@@ -304,9 +304,9 @@ else fimQuiz();
 
 function fimQuiz(){
 app.innerHTML=`
-<h2>Ja que chegou aqui porque parar?</h2>
-<button onclick='continuar()'>Continuar</button>
-<button onclick='this.innerText="Continuar"'>Não</button>
+<h2>se vc chegou ate aqui é porque foi aprovada , deseja continuar?</h2>
+<button onclick='continuar()'>Sim</button>
+<button onclick='this.innerText="Sim"'>Não</button>
 `;
 }
 
@@ -328,7 +328,15 @@ function textoPedido(){
 const c=document.querySelector(".cinema");
 
 c.innerHTML=`
-<p style='max-width:500px;font-size:20px'>Sei que eu não fui a melhor pessoa com você , mas eu quero consertar tudo de verdade e estou aqui pedindo a ultima chance de estarmos juntos e será ultima porque não vai precisa novamente disso , sei que não consigo apagar o passado mas consigo melhorar seu presente e construir um futuro ao seu lado</p>
+<p style='max-width:500px;font-size:20px'><div style='max-width:90vw;font-size:clamp(16px,4.5vw,20px);line-height:1.6;padding:10px 5px;margin:0 auto;word-break:break-word'>
+Sei que eu não fui a melhor pessoa com você.<br><br>
+Mas eu quero consertar tudo de verdade e estou aqui pedindo uma última chance para estarmos juntos.<br><br>
+E será a última vez que vou precisar pedir isso, porque quero fazer dar certo.<br><br>
+Talvez eu não consiga apagar o passado…<br>
+mas posso melhorar o seu presente<br>
+e construir um futuro ao seu lado.
+</div>
+</div></p>
 <button onclick='pedido()'>Continuar</button>
 `;
 }
