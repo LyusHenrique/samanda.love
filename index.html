@@ -3,438 +3,385 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Quiz Anime 💖</title>
+<title>Anime Quiz</title>
 
 <style>
-
-*{box-sizing:border-box}
 
 body{
 margin:0;
 font-family:Arial,Helvetica,sans-serif;
+background:black;
 color:white;
-text-align:center;
-min-height:100vh;
-overflow-x:hidden;
-background:linear-gradient(270deg,#0f0f0f,#1b1b2f,#0f0f0f);
-background-size:600% 600%;
-animation:bgAnime 15s ease infinite;
-}
-
-@keyframes bgAnime{
-0%{background-position:0% 50%}
-50%{background-position:100% 50%}
-100%{background-position:0% 50%}
-}
-
-.container{
-max-width:700px;
-margin:auto;
-padding:20px;
-}
-
-.card{
-background:#161616;
-padding:25px;
-border-radius:20px;
-box-shadow:0 0 35px rgba(255,0,120,0.35);
-perspective:1000px;
-}
-
-/* progresso */
-
-#progressBar{
-width:100%;
-height:14px;
-background:#333;
-border-radius:10px;
-margin-bottom:20px;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
 overflow:hidden;
 }
 
-#progress{
-height:100%;
-width:0%;
-background:linear-gradient(90deg,#ff3d6e,#ff8ab0);
-transition:0.4s;
+/* animated anime background */
+body::before{
+content:"";
+position:fixed;
+width:200%;
+height:200%;
+background:radial-gradient(circle at center,#1b2735,#090a0f 70%);
+animation:bgmove 30s linear infinite;
+z-index:-2;
 }
 
-/* carta */
-
-.flip{
-transition:transform .6s;
-transform-style:preserve-3d;
+@keyframes bgmove{
+from{transform:translate(-10%,-10%)}
+to{transform:translate(-30%,-30%)}
 }
 
-.flip.girar{
-transform:rotateY(180deg);
+.card{
+background:rgba(0,0,0,0.75);
+padding:25px;
+border-radius:18px;
+max-width:420px;
+width:100%;
+text-align:center;
+box-shadow:0 0 40px rgba(0,0,0,0.8);
 }
+
+h1{margin-top:0}
 
 img{
 width:220px;
 height:220px;
-object-fit:contain;
-background:#000;
-border-radius:15px;
-padding:10px;
+object-fit:cover;
+border-radius:12px;
 margin-bottom:15px;
+transition:transform .6s;
 }
 
+.flip{transform:rotateY(180deg)}
+
 button{
-margin:8px;
-padding:12px 22px;
-font-size:17px;
+width:100%;
+padding:12px;
+margin:10px 0;
 border:none;
 border-radius:12px;
-background:#ff3d6e;
+font-size:16px;
+background:#ff4b6e;
 color:white;
 cursor:pointer;
 transition:.25s;
 }
 
 button:hover{
-transform:scale(1.08);
-background:#ff1f58;
+transform:scale(1.05);
+background:#ff2d55;
 }
 
-.hidden{display:none}
-
-#contador{
-margin-bottom:10px;
-font-size:17px;
-color:#ff9ab5;
+.progress{
+height:8px;
+background:#333;
+border-radius:10px;
+overflow:hidden;
+margin-bottom:15px;
 }
 
-#mensagem{
-font-size:20px;
-line-height:1.6;
+.progress-bar{
+height:100%;
+width:0%;
+background:#ff4b6e;
+transition:.4s;
 }
 
-/* corações */
-
-.corações{
+/* cinematic overlay */
+.cinema{
 position:fixed;
+top:0;
+left:0;
 width:100%;
 height:100%;
-pointer-events:none;
+background:black;
+display:flex;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+text-align:center;
+padding:20px;
+animation:fadein 2s;
 }
 
-.coração{
-position:absolute;
-color:#ff4d88;
-animation:cair 6s linear infinite;
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+
+/* anime opening text */
+.opening{
+font-size:42px;
+letter-spacing:3px;
+animation:zoom 2s ease;
 }
 
-@keyframes cair{
-0%{transform:translateY(-100px);opacity:1}
-100%{transform:translateY(110vh);opacity:0}
+@keyframes zoom{
+0%{transform:scale(0);opacity:0}
+100%{transform:scale(1);opacity:1}
 }
 
-/* anel */
-
-#anel{
-font-size:90px;
-animation:girarAnel 2s infinite linear;
-}
-
-@keyframes girarAnel{
-0%{transform:rotateY(0)}
-100%{transform:rotateY(360deg)}
-}
-
-/* fogos */
-
-.firework{
+/* petals */
+.petal{
 position:fixed;
-width:6px;
-height:6px;
+width:10px;
+height:10px;
+background:pink;
 border-radius:50%;
-pointer-events:none;
+animation:fall linear infinite;
 }
 
-/* mobile */
-
-@media (max-width:600px){
-
-h1{font-size:24px}
-
-img{
-width:180px;
-height:180px;
+@keyframes fall{
+0%{transform:translateY(-10vh)}
+100%{transform:translateY(110vh)}
 }
 
-button{
-width:100%;
-font-size:18px;
+/* hearts */
+.heart{
+position:fixed;
+font-size:22px;
+color:#ff4b6e;
+animation:floatUp 4s linear forwards;
 }
 
+@keyframes floatUp{
+0%{transform:translateY(0);opacity:1}
+100%{transform:translateY(-200px);opacity:0}
+}
+
+/* ring box */
+.ringbox{
+width:120px;
+height:80px;
+background:#111;
+border-radius:10px;
+position:relative;
+margin:20px auto;
+animation:openbox 1.5s ease forwards;
+}
+
+.ringbox:before{
+content:"";
+position:absolute;
+top:-40px;
+left:0;
+width:120px;
+height:40px;
+background:#222;
+border-radius:10px 10px 0 0;
+transform-origin:bottom;
+animation:lid 1.5s forwards;
+}
+
+.ring{
+font-size:60px;
+margin-top:10px;
+animation:ringpop 1.5s ease;
+}
+
+@keyframes lid{
+0%{transform:rotateX(0)}
+100%{transform:rotateX(-120deg)}
+}
+
+@keyframes openbox{0%{transform:scale(.7)}100%{transform:scale(1)}}
+
+@keyframes ringpop{
+0%{transform:scale(0)}
+70%{transform:scale(1.4)}
+100%{transform:scale(1)}
 }
 
 </style>
 </head>
-
 <body>
 
-<div class="corações" id="coracoes"></div>
+<audio id="musica" loop>
+<source src="musica.mp3" type="audio/mpeg">
+</audio>
 
-<div class="container">
+<div id="app" class="card"></div>
 
-<h1>Quiz de Personagens de Anime</h1>
-
-<div class="card">
-
-<div id="progressBar">
-<div id="progress"></div>
-</div>
-
-<div id="quiz" class="flip">
-
-<div id="contador"></div>
-
-<img id="img" src="">
-
-<div id="alternativas"></div>
-
-</div>
-
-<div id="fase2" class="hidden">
-<h2>Se vc chegou até aqui é porque foi aprovada 😏 deseja continuar?</h2>
-<button onclick="continuarFase2()">Sim</button>
-<button id="nao">Não</button>
-</div>
-
-<div id="fase3" class="hidden">
-<h2>se vc clicou em não significa que vc quer com certeza então vamos continuar 😌</h2>
-<button onclick="faseMensagem()">Continuar</button>
-</div>
-
-<div id="fase4" class="hidden">
-<p id="mensagem">
-Sei que eu não fui a melhor pessoa com você , mas eu quero consertar tudo de verdade e estou aqui pedindo a ultima chance de estarmos juntos e será ultima porque não vai precisa novamente disso , sei que não consigo apagar o passado mas consigo melhorar seu presente e construir um futuro ao seu lado
-</p>
-<button onclick="pedido()">Continuar</button>
-</div>
-
-<div id="fase5" class="hidden">
-<h2>Samanda minha ruiva maravilhosa explendida , aceita namorar comigo? ❤️</h2>
-<button onclick="final()">Sim</button>
-<button onclick="final()">Com certeza</button>
-</div>
-
-<div id="final" class="hidden"></div>
-
-</div>
-
-</div>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <script>
 
-let perguntas=[
-{img:"imagens/seiya.jpg",op:["Seiya","Shiryu","Hyoga","Ikki"]},
-{img:"imagens/naruto.jpg",op:["Naruto","Sasuke","Kakashi","Itachi"]},
-{img:"imagens/goku.jpg",op:["Goku","Vegeta","Gohan","Bardock"]},
-{img:"imagens/luffy.jpg",op:["Luffy","Ace","Zoro","Sanji"]},
-{img:"imagens/ichigo.jpg",op:["Ichigo","Renji","Uryu","Aizen"]},
-{img:"imagens/sailormoon.jpg",op:["Sailor Moon","Sakura","Hinata","Bulma"]},
-{img:"imagens/light.jpg",op:["Light","L","Near","Mello"]},
-{img:"imagens/eren.jpg",op:["Eren","Levi","Armin","Jean"]},
-{img:"imagens/gon.jpg",op:["Gon","Killua","Kurapika","Leorio"]},
-{img:"imagens/tanjiro.jpg",op:["Tanjiro","Zenitsu","Inosuke","Rengoku"]},
-{img:"imagens/saitama.jpg",op:["Saitama","Genos","Garou","King"]},
-{img:"imagens/edward.jpg",op:["Edward","Alphonse","Roy","Scar"]},
-{img:"imagens/kirito.jpg",op:["Kirito","Asuna","Sinon","Klein"]},
-{img:"imagens/asta.jpg",op:["Asta","Yuno","Yami","Noelle"]},
-{img:"imagens/deku.jpg",op:["Deku","Bakugo","Todoroki","All Might"]},
-{img:"imagens/natsu.jpg",op:["Natsu","Gray","Erza","Gajeel"]},
-{img:"imagens/meliodas.jpg",op:["Meliodas","Ban","King","Escanor"]},
-{img:"imagens/jotaro.jpg",op:["Jotaro","Dio","Joseph","Giorno"]},
-{img:"imagens/spike.jpg",op:["Spike","Jet","Vicious","Faye"]},
-{img:"imagens/guts.jpg",op:["Guts","Griffith","Casca","Skull Knight"]}
+const musica=document.getElementById("musica");
+
+window.addEventListener("load",()=>{
+musica.volume=0.6;
+const p=musica.play();
+if(p!==undefined){p.catch(()=>{document.body.addEventListener("click",()=>musica.play(),{once:true})})}
+});
+
+/* sakura petals */
+for(let i=0;i<30;i++){
+let p=document.createElement("div");
+p.className="petal";
+p.style.left=Math.random()*100+"vw";
+p.style.animationDuration=5+Math.random()*10+"s";
+document.body.appendChild(p);
+}
+
+const app=document.getElementById("app");
+
+/* anime opening */
+function telaInicial(){
+app.innerHTML=`
+<div class='opening'>🎮 ANIME QUIZ</div>
+<p>Veja se você realmente conhece personagens de anime</p>
+<button onclick="iniciar()">Iniciar Jogo</button>
+`;
+}
+
+const perguntas=[
+{img:'seiya.jpg',o:['Seiya','Ikki','Shiryu','Hyoga']},
+{img:'naruto.jpg',o:['Naruto','Sasuke','Gaara','Minato']},
+{img:'goku.jpg',o:['Vegeta','Goku','Gohan','Bardock']},
+{img:'luffy.jpg',o:['Zoro','Ace','Luffy','Sabo']},
+{img:'ichigo.jpg',o:['Ichigo','Renji','Uryu','Aizen']},
+{img:'tanjiro.jpg',o:['Zenitsu','Tanjiro','Inosuke','Giyu']},
+{img:'levi.jpg',o:['Levi','Eren','Erwin','Jean']},
+{img:'saitama.jpg',o:['Genos','Saitama','Garou','Bang']},
+{img:'asta.jpg',o:['Yuno','Asta','Noelle','Yami']},
+{img:'natsu.jpg',o:['Gray','Natsu','Laxus','Gajeel']},
+{img:'deku.jpg',o:['Bakugo','Todoroki','Deku','All Might']},
+{img:'edward.jpg',o:['Alphonse','Roy','Edward','Scar']},
+{img:'killua.jpg',o:['Killua','Gon','Hisoka','Illumi']},
+{img:'kaneki.jpg',o:['Touka','Kaneki','Arima','Uta']},
+{img:'meliodas.jpg',o:['Ban','Meliodas','Escanor','King']},
+{img:'yusuke.jpg',o:['Hiei','Kurama','Yusuke','Toguro']},
+{img:'kakashi.jpg',o:['Kakashi','Obito','Itachi','Jiraiya']},
+{img:'gojo.jpg',o:['Gojo','Geto','Sukuna','Megumi']},
+{img:'eren.jpg',o:['Eren','Armin','Reiner','Levi']},
+{img:'vegeta.jpg',o:['Vegeta','Goku','Broly','Trunks']}
 ];
 
 let atual=0;
 
+function iniciar(){
+app.innerHTML=`
+<div class='progress'><div class='progress-bar' id='progress'></div></div>
+<img id='img'>
+<div id='ops'></div>
+`;
+carregar();
+}
+
 function carregar(){
+
+const img=document.getElementById("img");
+const ops=document.getElementById("ops");
+const progress=document.getElementById("progress");
+
+progress.style.width=(atual/perguntas.length*100)+"%";
 
 let p=perguntas[atual];
 
-let img=document.getElementById("img");
+img.classList.add("flip");
+setTimeout(()=>{
+img.src="imagens/"+p.img;
+img.classList.remove("flip");
+},300);
 
-img.src=p.img;
+ops.innerHTML="";
 
-let progress=(atual/perguntas.length)*100;
-
-document.getElementById("progress").style.width=progress+"%";
-
-document.getElementById("contador").innerText="Pergunta "+(atual+1)+" de 20";
-
-let alt=document.getElementById("alternativas");
-
-alt.innerHTML="";
-
-p.op.forEach(o=>{
-
+p.o.forEach(o=>{
 let b=document.createElement("button");
-
 b.innerText=o;
-
-b.onclick=proxima;
-
-alt.appendChild(b);
-
+b.onclick=responder;
+ops.appendChild(b);
 });
 
 }
 
-function proxima(){
-
-let quiz=document.getElementById("quiz");
-
-quiz.classList.add("girar");
-
-setTimeout(()=>{
-
-quiz.classList.remove("girar");
-
+function responder(){
 atual++;
-
-if(atual<perguntas.length){
-
-carregar();
-
-}else{
-
-quiz.classList.add("hidden");
-
-fase2.classList.remove("hidden");
-
+if(atual<perguntas.length)carregar();
+else fimQuiz();
 }
 
-},300);
-
+function fimQuiz(){
+app.innerHTML=`
+<h2>Ja que chegou aqui porque parar?</h2>
+<button onclick='continuar()'>Continuar</button>
+<button onclick='this.innerText="Continuar"'>Não</button>
+`;
 }
 
-function continuarFase2(){
+function continuar(){
 
-fase2.classList.add("hidden");
-fase3.classList.remove("hidden");
+const cinema=document.createElement("div");
+cinema.className="cinema";
+cinema.innerHTML=`
+<h2>Uma última coisa...</h2>
+<p>Leia com atenção</p>
+<button onclick='textoPedido()'>Continuar</button>
+`;
 
+document.body.appendChild(cinema);
 }
 
-function faseMensagem(){
+function textoPedido(){
 
-fase3.classList.add("hidden");
-fase4.classList.remove("hidden");
+const c=document.querySelector(".cinema");
 
+c.innerHTML=`
+<p style='max-width:500px;font-size:20px'>Sei que eu não fui a melhor pessoa com você , mas eu quero consertar tudo de verdade e estou aqui pedindo a ultima chance de estarmos juntos e será ultima porque não vai precisa novamente disso , sei que não consigo apagar o passado mas consigo melhorar seu presente e construir um futuro ao seu lado</p>
+<button onclick='pedido()'>Continuar</button>
+`;
 }
 
 function pedido(){
 
-fase4.classList.add("hidden");
-fase5.classList.remove("hidden");
+const c=document.querySelector(".cinema");
 
-}
-
-function final(){
-
-fase5.classList.add("hidden");
-
-let tela=document.getElementById("final");
-
-// cena especial
-
-tela.innerHTML=`
-<h1 style="font-size:40px">💍 ELA DISSE SIM 💍</h1>
-<div id="anel">💍</div>
-<p style="font-size:22px">Agora é oficial.</p>
-<p style="font-size:20px">Prometo fazer você feliz todos os dias da minha vida.</p>
+c.innerHTML=`
+<h1>Samanda minha ruiva maravilhosa esplendida</h1>
+<h2>aceita namorar comigo?</h2>
+<button onclick='aceitou()'>Sim</button>
+<button onclick='aceitou()'>Com certeza</button>
 `;
-
-
-tela.classList.remove("hidden");
-
-// fogos
-
-for(let i=0;i<8;i++){
-setTimeout(fogos,i*600);
 }
 
+function coracoes(){
+setInterval(()=>{
+let h=document.createElement("div");
+h.className="heart";
+h.innerHTML="❤";
+h.style.left=Math.random()*100+"vw";
+h.style.bottom="0";
+document.body.appendChild(h);
+setTimeout(()=>h.remove(),4000);
+},300);
 }
 
 function fogos(){
-
-let x=Math.random()*window.innerWidth;
-let y=Math.random()*window.innerHeight/2;
-
-for(let i=0;i<40;i++){
-
-let p=document.createElement("div");
-
-p.className="firework";
-
-p.style.left=x+"px";
-p.style.top=y+"px";
-
-p.style.background=`hsl(${Math.random()*360},100%,60%)`;
-
-let ang=Math.random()*2*Math.PI;
-let dist=Math.random()*120+40;
-
-let dx=Math.cos(ang)*dist;
-let dy=Math.sin(ang)*dist;
-
-p.animate([
-{transform:"translate(0,0)",opacity:1},
-{transform:`translate(${dx}px,${dy}px)`,opacity:0}
-],{
-duration:1200
-});
-
-setTimeout(()=>p.remove(),1200);
-
-
-document.body.appendChild(p);
-
+const end=Date.now()+9000;
+(function frame(){
+confetti({particleCount:10,spread:80,origin:{x:Math.random(),y:Math.random()-0.2}});
+if(Date.now()<end)requestAnimationFrame(frame);
+})();
 }
 
+function aceitou(){
+
+fogos();
+coracoes();
+
+const c=document.querySelector(".cinema");
+
+c.innerHTML=`
+<div class='ringbox'></div>
+<div class='ring'>💍</div>
+<h1>Ela aceitou ❤️</h1>
+<p>é um pedido serio para namorarmos claro que nao vai anular que eu vou pedir pessoalmente também, mas achei essa maneira criativa de tentar fazer isso</p>
+`;
 }
 
-// botão não fugindo
 
-let nao=document.getElementById("nao");
-
-nao.addEventListener("mouseover",()=>{
-
-let x=Math.random()*300-150;
-let y=Math.random()*200-100;
-
-nao.style.transform=`translate(${x}px,${y}px)`;
-
-});
-
-// corações
-
-function criarCoracao(){
-
-let c=document.createElement("div");
-
-c.className="coração";
-
-c.innerHTML="❤";
-
-c.style.left=Math.random()*100+"vw";
-
-c.style.fontSize=(Math.random()*20+15)+"px";
-
-coracoes.appendChild(c);
-
-setTimeout(()=>c.remove(),6000);
-
-}
-
-setInterval(criarCoracao,600);
-
-carregar();
+telaInicial();
 
 </script>
 
