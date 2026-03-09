@@ -6,7 +6,6 @@
 <title>Anime Quiz</title>
 
 <style>
-
 body{
 margin:0;
 font-family:Arial,Helvetica,sans-serif;
@@ -19,7 +18,6 @@ align-items:center;
 overflow:hidden;
 }
 
-/* animated anime background */
 body::before{
 content:"";
 position:fixed;
@@ -40,12 +38,10 @@ background:rgba(0,0,0,0.75);
 padding:25px;
 border-radius:18px;
 max-width:420px;
-width:100%;
+width:95%;
 text-align:center;
 box-shadow:0 0 40px rgba(0,0,0,0.8);
 }
-
-h1{margin-top:0}
 
 img{
 width:220px;
@@ -71,127 +67,56 @@ cursor:pointer;
 transition:.25s;
 }
 
-button:hover{
-transform:scale(1.05);
-background:#ff2d55;
+button:hover{transform:scale(1.05)}
+
+.progress{height:8px;background:#333;border-radius:10px;overflow:hidden;margin-bottom:10px}
+.progress-bar{height:100%;width:0;background:#ff4b6e;transition:.4s}
+
+/* XP BAR */
+.xp{height:6px;background:#222;border-radius:10px;overflow:hidden;margin-bottom:15px}
+.xpbar{height:100%;width:0;background:#4caf50;transition:.4s}
+
+.correct{color:#4caf50;font-weight:bold;font-size:20px;animation:pop .5s}
+.wrong{color:#ff4444;font-weight:bold;font-size:20px;animation:shake .4s}
+
+@keyframes pop{0%{transform:scale(.5)}100%{transform:scale(1)}}
+
+@keyframes shake{
+0%{transform:translateX(0)}
+25%{transform:translateX(-5px)}
+50%{transform:translateX(5px)}
+75%{transform:translateX(-5px)}
+100%{transform:translateX(0)}
 }
 
-.progress{
-height:8px;
-background:#333;
-border-radius:10px;
-overflow:hidden;
-margin-bottom:15px;
-}
-
-.progress-bar{
-height:100%;
-width:0%;
-background:#ff4b6e;
-transition:.4s;
-}
-
-/* cinematic overlay */
 .cinema{
 position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
+top:0;left:0;width:100%;height:100%;
 background:black;
 display:flex;
 justify-content:center;
 align-items:center;
 flex-direction:column;
-text-align:center;
 padding:20px;
+text-align:center;
 animation:fadein 2s;
 }
 
 @keyframes fadein{from{opacity:0}to{opacity:1}}
 
-/* anime opening text */
-.opening{
-font-size:42px;
-letter-spacing:3px;
-animation:zoom 2s ease;
-}
+.petal{position:fixed;width:10px;height:10px;background:pink;border-radius:50%;animation:fall linear infinite}
+@keyframes fall{0%{transform:translateY(-10vh)}100%{transform:translateY(110vh)}}
 
-@keyframes zoom{
-0%{transform:scale(0);opacity:0}
-100%{transform:scale(1);opacity:1}
-}
+.heart{position:fixed;font-size:22px;color:#ff4b6e;animation:floatUp 4s linear forwards}
+@keyframes floatUp{0%{transform:translateY(0);opacity:1}100%{transform:translateY(-200px);opacity:0}}
 
-/* petals */
-.petal{
-position:fixed;
-width:10px;
-height:10px;
-background:pink;
-border-radius:50%;
-animation:fall linear infinite;
-}
+.ringbox{width:120px;height:80px;background:#111;border-radius:10px;position:relative;margin:20px auto}
+.ringbox:before{content:"";position:absolute;top:-40px;left:0;width:120px;height:40px;background:#222;border-radius:10px 10px 0 0;transform-origin:bottom;animation:lid 1.5s forwards}
 
-@keyframes fall{
-0%{transform:translateY(-10vh)}
-100%{transform:translateY(110vh)}
-}
+.ring{font-size:60px;margin-top:10px;animation:ringpop 1.5s ease}
 
-/* hearts */
-.heart{
-position:fixed;
-font-size:22px;
-color:#ff4b6e;
-animation:floatUp 4s linear forwards;
-}
-
-@keyframes floatUp{
-0%{transform:translateY(0);opacity:1}
-100%{transform:translateY(-200px);opacity:0}
-}
-
-/* ring box */
-.ringbox{
-width:120px;
-height:80px;
-background:#111;
-border-radius:10px;
-position:relative;
-margin:20px auto;
-animation:openbox 1.5s ease forwards;
-}
-
-.ringbox:before{
-content:"";
-position:absolute;
-top:-40px;
-left:0;
-width:120px;
-height:40px;
-background:#222;
-border-radius:10px 10px 0 0;
-transform-origin:bottom;
-animation:lid 1.5s forwards;
-}
-
-.ring{
-font-size:60px;
-margin-top:10px;
-animation:ringpop 1.5s ease;
-}
-
-@keyframes lid{
-0%{transform:rotateX(0)}
-100%{transform:rotateX(-120deg)}
-}
-
-@keyframes openbox{0%{transform:scale(.7)}100%{transform:scale(1)}}
-
-@keyframes ringpop{
-0%{transform:scale(0)}
-70%{transform:scale(1.4)}
-100%{transform:scale(1)}
-}
+@keyframes lid{0%{transform:rotateX(0)}100%{transform:rotateX(-120deg)}}
+@keyframes ringpop{0%{transform:scale(0)}70%{transform:scale(1.4)}100%{transform:scale(1)}}
 
 </style>
 </head>
@@ -201,195 +126,226 @@ animation:ringpop 1.5s ease;
 <source src="musica.mp3" type="audio/mpeg">
 </audio>
 
+<audio id="somAcerto"><source src="acerto.mp3" type="audio/mpeg"></audio>
+<audio id="somErro"><source src="erro.mp3" type="audio/mpeg"></audio>
+
 <div id="app" class="card"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <script>
 
-const musica=document.getElementById("musica");
+const musica=document.getElementById("musica")
+const somAcerto=document.getElementById("somAcerto")
+const somErro=document.getElementById("somErro")
 
 window.addEventListener("load",()=>{
-musica.volume=0.6;
-const p=musica.play();
+musica.volume=.6
+const p=musica.play()
 if(p!==undefined){p.catch(()=>{document.body.addEventListener("click",()=>musica.play(),{once:true})})}
-});
+})
 
-/* sakura petals */
 for(let i=0;i<30;i++){
-let p=document.createElement("div");
-p.className="petal";
-p.style.left=Math.random()*100+"vw";
-p.style.animationDuration=5+Math.random()*10+"s";
-document.body.appendChild(p);
+let p=document.createElement("div")
+p.className="petal"
+p.style.left=Math.random()*100+"vw"
+p.style.animationDuration=5+Math.random()*10+"s"
+document.body.appendChild(p)
 }
 
-const app=document.getElementById("app");
+const app=document.getElementById("app")
 
-/* anime opening */
 function telaInicial(){
 app.innerHTML=`
-<div class='opening'>🎮 ANIME QUIZ</div>
+<h1>🎮 Anime Quiz</h1>
 <p>Veja se você realmente conhece personagens de anime</p>
 <button onclick="iniciar()">Iniciar Jogo</button>
-`;
+`
 }
 
 const perguntas=[
-{img:'seiya.jpg',o:['Seiya','Ikki','Shiryu','Hyoga']},
-{img:'naruto.jpg',o:['Naruto','Sasuke','Gaara','Minato']},
-{img:'goku.jpg',o:['Vegeta','Goku','Gohan','Bardock']},
-{img:'luffy.jpg',o:['Zoro','Ace','Luffy','Sabo']},
-{img:'ichigo.jpg',o:['Ichigo','Renji','Uryu','Aizen']},
-{img:'tanjiro.jpg',o:['Zenitsu','Tanjiro','Inosuke','Giyu']},
-{img:'levi.jpg',o:['Levi','Eren','Erwin','Jean']},
-{img:'saitama.jpg',o:['Genos','Saitama','Garou','Bang']},
-{img:'asta.jpg',o:['Yuno','Asta','Noelle','Yami']},
-{img:'natsu.jpg',o:['Gray','Natsu','Laxus','Gajeel']},
-{img:'deku.jpg',o:['Bakugo','Todoroki','Deku','All Might']},
-{img:'edward.jpg',o:['Alphonse','Roy','Edward','Scar']},
-{img:'killua.jpg',o:['Killua','Gon','Hisoka','Illumi']},
-{img:'kaneki.jpg',o:['Touka','Kaneki','Arima','Uta']},
-{img:'meliodas.jpg',o:['Ban','Meliodas','Escanor','King']},
-{img:'yusuke.jpg',o:['Hiei','Kurama','Yusuke','Toguro']},
-{img:'kakashi.jpg',o:['Kakashi','Obito','Itachi','Jiraiya']},
-{img:'gojo.jpg',o:['Gojo','Geto','Sukuna','Megumi']},
-{img:'eren.jpg',o:['Eren','Armin','Reiner','Levi']},
-{img:'vegeta.jpg',o:['Vegeta','Goku','Broly','Trunks']}
-];
+{img:'seiya.jpg',r:'Seiya',o:['Seiya','Ikki','Shiryu','Hyoga']},
+{img:'naruto.jpg',r:'Naruto',o:['Naruto','Sasuke','Gaara','Minato']},
+{img:'goku.jpg',r:'Goku',o:['Vegeta','Goku','Gohan','Bardock']},
+{img:'luffy.jpg',r:'Luffy',o:['Zoro','Ace','Luffy','Sabo']},
+{img:'ichigo.jpg',r:'Ichigo',o:['Ichigo','Renji','Uryu','Aizen']},
+{img:'tanjiro.jpg',r:'Tanjiro',o:['Zenitsu','Tanjiro','Inosuke','Giyu']},
+{img:'levi.jpg',r:'Levi',o:['Levi','Eren','Erwin','Jean']},
+{img:'saitama.jpg',r:'Saitama',o:['Genos','Saitama','Garou','Bang']},
+{img:'asta.jpg',r:'Asta',o:['Yuno','Asta','Noelle','Yami']},
+{img:'natsu.jpg',r:'Natsu',o:['Gray','Natsu','Laxus','Gajeel']},
+{img:'deku.jpg',r:'Deku',o:['Bakugo','Todoroki','Deku','All Might']},
+{img:'edward.jpg',r:'Edward',o:['Alphonse','Roy','Edward','Scar']},
+{img:'killua.jpg',r:'Killua',o:['Killua','Gon','Hisoka','Illumi']},
+{img:'kaneki.jpg',r:'Kaneki',o:['Touka','Kaneki','Arima','Uta']},
+{img:'meliodas.jpg',r:'Meliodas',o:['Ban','Meliodas','Escanor','King']},
+{img:'yusuke.jpg',r:'Yusuke',o:['Hiei','Kurama','Yusuke','Toguro']},
+{img:'kakashi.jpg',r:'Kakashi',o:['Kakashi','Obito','Itachi','Jiraiya']},
+{img:'gojo.jpg',r:'Gojo',o:['Gojo','Geto','Sukuna','Megumi']},
+{img:'eren.jpg',r:'Eren',o:['Eren','Armin','Reiner','Levi']},
+{img:'vegeta.jpg',r:'Vegeta',o:['Vegeta','Goku','Broly','Trunks']}
+]
 
-let atual=0;
+let atual=0
+let acertos=0
+let erros=0
 
 function iniciar(){
 app.innerHTML=`
 <div class='progress'><div class='progress-bar' id='progress'></div></div>
+<div class='xp'><div class='xpbar' id='xpbar'></div></div>
 <img id='img'>
+<div id='feedback'></div>
 <div id='ops'></div>
-`;
-carregar();
+`
+carregar()
 }
 
 function carregar(){
+const img=document.getElementById("img")
+const ops=document.getElementById("ops")
+const progress=document.getElementById("progress")
 
-const img=document.getElementById("img");
-const ops=document.getElementById("ops");
-const progress=document.getElementById("progress");
+progress.style.width=(atual/perguntas.length*100)+"%"
 
-progress.style.width=(atual/perguntas.length*100)+"%";
+let p=perguntas[atual]
 
-let p=perguntas[atual];
-
-img.classList.add("flip");
+img.classList.add("flip")
 setTimeout(()=>{
-img.src="imagens/"+p.img;
-img.classList.remove("flip");
-},300);
+img.src="imagens/"+p.img
+img.classList.remove("flip")
+},300)
 
-ops.innerHTML="";
+ops.innerHTML=""
 
 p.o.forEach(o=>{
-let b=document.createElement("button");
-b.innerText=o;
-b.onclick=responder;
-ops.appendChild(b);
-});
-
+let b=document.createElement("button")
+b.innerText=o
+b.onclick=()=>responder(o)
+ops.appendChild(b)
+})
 }
 
-function responder(){
-atual++;
-if(atual<perguntas.length)carregar();
-else fimQuiz();
+function responder(resposta){
+const feedback=document.getElementById("feedback")
+const xpbar=document.getElementById("xpbar")
+
+if(resposta===perguntas[atual].r){
+acertos++
+somAcerto.play()
+feedback.innerHTML="<div class='correct'>✔ Correto!</div>"
+}else{
+erros++
+somErro.play()
+feedback.innerHTML="<div class='wrong'>✖ Errou!</div>"
+}
+
+xpbar.style.width=(acertos/perguntas.length*100)+"%"
+
+setTimeout(()=>{
+atual++
+feedback.innerHTML=""
+
+if(atual<perguntas.length){
+carregar()
+}else{
+fimQuiz()
+}
+},900)
 }
 
 function fimQuiz(){
+
+let rank=""
+if(acertos<=5)rank="Otaku iniciante 😅"
+else if(acertos<=10)rank="Conhece alguns animes 🙂"
+else if(acertos<=15)rank="Otaku de respeito 🔥"
+else rank="Rainha dos animes 👑"
+
 app.innerHTML=`
-<h2>se vc chegou ate aqui é porque foi aprovada , deseja continuar?</h2>
+<h2>Quiz terminado!</h2>
+<p>✅ Acertos: ${acertos}</p>
+<p>❌ Erros: ${erros}</p>
+<h3>🏆 Rank: ${rank}</h3>
+<br>
+<h3>se vc chegou ate aqui porque parar? , deseja continuar?</h3>
 <button onclick='continuar()'>Sim</button>
 <button onclick='this.innerText="Sim"'>Não</button>
-`;
+`
 }
 
 function continuar(){
-
-const cinema=document.createElement("div");
-cinema.className="cinema";
+const cinema=document.createElement("div")
+cinema.className="cinema"
 cinema.innerHTML=`
 <h2>Uma última coisa...</h2>
-<p>Leia com atenção</p>
 <button onclick='textoPedido()'>Continuar</button>
-`;
+`
 
-document.body.appendChild(cinema);
+document.body.appendChild(cinema)
 }
 
 function textoPedido(){
-
-const c=document.querySelector(".cinema");
+const c=document.querySelector(".cinema")
 
 c.innerHTML=`
-<p style='max-width:500px;font-size:20px'><div style='max-width:90vw;font-size:clamp(16px,4.5vw,20px);line-height:1.6;padding:10px 5px;margin:0 auto;word-break:break-word'>
+<p style='max-width:420px;font-size:clamp(16px,4.5vw,20px);line-height:1.6'>
 Sei que eu não fui a melhor pessoa com você.<br><br>
 Mas eu quero consertar tudo de verdade e estou aqui pedindo uma última chance para estarmos juntos.<br><br>
-E será a última vez que vou precisar pedir isso, porque quero fazer dar certo.<br><br>
 Talvez eu não consiga apagar o passado…<br>
 mas posso melhorar o seu presente<br>
 e construir um futuro ao seu lado.
-</div>
-</div></p>
+</p>
 <button onclick='pedido()'>Continuar</button>
-`;
+`
 }
 
 function pedido(){
-
-const c=document.querySelector(".cinema");
+const c=document.querySelector(".cinema")
 
 c.innerHTML=`
-<h1>Samanda minha ruiva maravilhosa esplendida</h1>
+<h1>Samanda minha ruiva maravilhosa</h1>
 <h2>aceita namorar comigo?</h2>
 <button onclick='aceitou()'>Sim</button>
 <button onclick='aceitou()'>Com certeza</button>
-`;
+`
 }
 
 function coracoes(){
 setInterval(()=>{
-let h=document.createElement("div");
-h.className="heart";
-h.innerHTML="❤";
-h.style.left=Math.random()*100+"vw";
-h.style.bottom="0";
-document.body.appendChild(h);
-setTimeout(()=>h.remove(),4000);
-},300);
+let h=document.createElement("div")
+h.className="heart"
+h.innerHTML="❤"
+h.style.left=Math.random()*100+"vw"
+h.style.bottom="0"
+document.body.appendChild(h)
+setTimeout(()=>h.remove(),4000)
+},300)
 }
 
 function fogos(){
-const end=Date.now()+9000;
+const end=Date.now()+9000
 (function frame(){
-confetti({particleCount:10,spread:80,origin:{x:Math.random(),y:Math.random()-0.2}});
-if(Date.now()<end)requestAnimationFrame(frame);
-})();
+confetti({particleCount:10,spread:80,origin:{x:Math.random(),y:Math.random()-0.2}})
+if(Date.now()<end)requestAnimationFrame(frame)
+})()
 }
 
 function aceitou(){
+fogos()
+coracoes()
 
-fogos();
-coracoes();
-
-const c=document.querySelector(".cinema");
+const c=document.querySelector(".cinema")
 
 c.innerHTML=`
 <div class='ringbox'></div>
 <div class='ring'>💍</div>
 <h1>Ela aceitou ❤️</h1>
-<p>é um pedido serio para namorarmos claro que nao vai anular que eu vou pedir pessoalmente também, mas achei essa maneira criativa de tentar fazer isso</p>
-`;
+<p>é um pedido sério para namorarmos. Claro que não vai anular que eu vou pedir pessoalmente também, mas achei essa maneira criativa de tentar fazer isso.</p>
+`
 }
 
-
-telaInicial();
+telaInicial()
 
 </script>
 
